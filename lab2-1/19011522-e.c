@@ -5,15 +5,15 @@
 
 int main()
 {
-	char	ch = 'Y';
+	char	ch = 'K';
 	int	fd, i;
-
-	if ((fd = open("./test1", O_WRONLY)) < 0)
+	
+	if ((fd = open("./test1", O_WRONLY|O_TRUNC)) < 0)
 	{
 		write(2, "open error\n", 11);
 		return (1);
 	}
-	for (i = 0; i < 5; i++)
+	for (i = 0; i < 3; i++)
 		write(fd, &ch, 1);
 	close(fd);
 	return (0);
