@@ -32,11 +32,9 @@ void vi_m(char **res){
 	}
 	while (1) {
 		n = read(0, buf, sizeof(buf));
-		if (strcmp(buf, "quit") == 0)
+		if (strncmp(buf, "quit\n", 5) == 0)
 			return ;
 		write(fd, buf, n);
-		for (int i = 0; i < n; i++)
-			buf[i] = 0;
 	}
 }
 
