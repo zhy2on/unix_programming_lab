@@ -1,6 +1,4 @@
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include "/home/account/class/tspark/unix19011522/includes.h"
 
 int main(void) {
 	int fd, i;
