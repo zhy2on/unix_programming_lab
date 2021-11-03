@@ -1,6 +1,0 @@
-[submodule "practice"]
-	path = practice
-	url = https://github.com/zhy2on/unix_programming_practice.git
-[submodule "lab"]
-	path = lab
-	url = https://github.com/zhy2on/unix_programming_lab.git
