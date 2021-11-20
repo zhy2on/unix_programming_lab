@@ -33,7 +33,7 @@ void do_first_child(int p1[2], int p2[2]) {
 	pipe(pip2);
 	if (fork() == 0)
 		do_second_child(pip1, pip2);
-
+	
 	read(p1[0], &in, sizeof(int));
 	write(pip1[1], &in, sizeof(int));
 
@@ -45,22 +45,13 @@ void do_first_child(int p1[2], int p2[2]) {
 	exit(0);
 }
 
-void parent(int p1[2][2], int p2[2][2]) {
-	int n1, n2;
-
-	scanf("%d %d", &n1, &n2);
-
-	write(p1[0][1], &n1, sizeof(int));
-	write(p1[1][1], &n2, sizeof(int));
-
-	read(p2[0][0], &n1, sizeof(int));
-	read(p2[1][0], &n2, sizeof(int));
-
-	printf("parent: %d %d\n", n1, n2); 
+void parent(int in, int p1[2], int p2[2]) {
+	write(p1[1], &in, sizeof(int));
+	read(p2[0], &in, sizeof(int));
 }
 
 int main(void) {
-	int pip1[2][2], pip2[2][2], in, i;
+	int pip1[2][2], pip2[2][2], n[2], i;
 
 	for (i = 0; i < 2; i++) {
 		pipe(pip1[i]);
@@ -68,11 +59,14 @@ int main(void) {
 		if (fork() == 0)
 			do_first_child(pip1[i], pip2[i]);
 	}
+	
+	scanf("%d %d", &n[0], &n[1]);
+	for (i = 0; i < 2; i++)
+		parent(n[i], pip1[i], pip2[i]);
+	printf("parent : %d %d\n", n[0], n[1]);
 
-	parent(pip1, pip2);
-
-	for (i = 0; i < 2; i++) {
+	for (i = 0; i < 2; i++)
 		wait(0);
-	}
 	exit(0);
 }
+
