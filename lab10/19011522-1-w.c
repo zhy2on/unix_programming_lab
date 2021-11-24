@@ -21,7 +21,7 @@ int main(void){
 	pid_t pid;
 	char *addr;
 
-	fd = open("temp", O_RDONLY);// 파일을 읽기 가능하게 open
+	fd = open("temp", O_RDONLY|O_CREAT,0600);// 파일을 읽기 가능하게 open
 	while ((n = read(fd, &pid, sizeof(pid_t))) != sizeof(pid_t))
 		sleep(1);
 

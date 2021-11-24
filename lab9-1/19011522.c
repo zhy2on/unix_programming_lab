@@ -38,7 +38,6 @@ int main(void){
 		}
 		sum+=num;
 		printf("sum=%d\n", sum);
-
 	}
 	exit(0);
 }

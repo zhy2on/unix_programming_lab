@@ -21,7 +21,7 @@ void catchsig(int);
 void do_child(void){
 	int i, in, fd;
 	// “data1” 파일을 쓰기 가능하게 open
-	fd = open("data1", O_WRONLY);
+	fd = open("data1", O_WRONLY|O_CREAT,0600);
 	for (i=0; i<5; i++){
 		scanf("%d", &in);
 		// “data1” 파일에 정수를 하나 쓰기
@@ -44,7 +44,7 @@ int main(void) {
 	act.sa_handler = catchsig;
 	sigaction(SIGUSR1, &act, NULL);
 
-	if ((pid=fork())==0){
+	if ((pid=fork())==0){ //file pointer를 공유하지 않게 하기 위해 child를 만들어 놓고 나서 open을 해야한다.
 		do_child();
 	}
 	// “data1” 파일을 읽기 가능하게 open

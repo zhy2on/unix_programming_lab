@@ -34,7 +34,6 @@ int main(void) {
 	}
 
 	printf("B의 pid=%d\n", pid);
-	ftruncate(fd, 2048);
 
 	n = read(0, addr, 512) - 1;
 	addr[n] = '\0';

@@ -27,7 +27,7 @@ int main(void) {
 	act.sa_handler = catchsig;
 	sigaction(SIGUSR1, &act, NULL);
 
-	fd = open("temp", O_RDWR|O_CREAT|O_TRUNC, 0600);
+	fd = open("temp", O_RDWR|O_CREAT, 0600);
 
 	pid = getpid();
 	write(fd, &pid, sizeof(pid_t));

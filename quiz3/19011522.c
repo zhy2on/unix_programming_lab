@@ -16,7 +16,8 @@
 #include <sys/shm.h>
 #include <time.h>
 void do_child(char **res) {
-	execl(res[0], res[0], res[1], res[2], res[3], (char *)0);
+	execv(res[0], res);
+	//execl(res[0], res[0], res[1], res[2], res[3], (char *)0);
 	exit(0);
 }
 int main(void) {	
@@ -35,7 +36,6 @@ int main(void) {
 		while (res[i]){
 			res[++i]=strtok(NULL, " ");
 		}
-
 		if (strcmp(res[0], "exit")==0){
 			exit(0);
 		}
