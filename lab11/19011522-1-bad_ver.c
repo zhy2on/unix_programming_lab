@@ -38,7 +38,7 @@ int main(void){
 void parent(int p[3][2]){
 	char buf[MSGSIZE], ch;
 	fd_set set, master;
-	int i, j, k, cnt=0, n;
+	int i, j, k, cnt, n;
 	struct timeval time;
 
 	for (i=0; i<3; i++)
@@ -47,7 +47,7 @@ void parent(int p[3][2]){
 	for (i=0; i<3; i++)
 		FD_SET(p[i][0], &master);
 
-	time.tv_sec = 5;
+	time.tv_sec = 10;
 	while (set=master, select(p[2][0]+1, &set, NULL, NULL, &time) > 0) {
 		for (i=0; i<3; i++){
 			if (FD_ISSET(p[i][0], &set)){
@@ -55,15 +55,9 @@ void parent(int p[3][2]){
 					printf("MSG from %d=%s\n", i, buf);
 				else if (n == 0) {
 					FD_CLR(p[i][0], &master);
-					cnt++;
 				}
 			}
 		}
-		/*
-		if (cnt == 3)
-			return;
-		*/
-		time.tv_sec = 5; //while문 안에서 timeval을 새로 갱신해줘야 한다.
 	}
 }
 
