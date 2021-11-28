@@ -23,10 +23,8 @@ int main(int argc, char **argv) {
 
 	id=atoi(argv[1]);
 	// id에 따라 적절한 fifo open
-	while ((fd_w = open(f[id], O_WRONLY)) < 0)
-		sleep(1);
-	while((fd_r = open(f[id+3], O_RDONLY)) < 0)
-		sleep(1);
+	fd_w = open(f[id], O_WRONLY);
+	fd_r = open(f[id+3], O_RDONLY);
 
 	for (i=0; i<3; i++){
 		scanf("%s", buf);
