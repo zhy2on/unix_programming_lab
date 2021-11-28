@@ -33,9 +33,9 @@ int main(void) {
 
 	for (i=0; i<15; i++) {
 		// message 받기
-		msgrcv(qid, &msg, sizeof(int), 0, 0);
+		msgrcv(qid, &msg, sizeof(int), -3, 0); // 음수인 경우 절댓값보다 작은 번호 다 받음
 		// mtype 조정
-		msg.mtype = msg.mtype+3;
+		msg.mtype += 3;
 		msg.data += 8;
 		// message 보내기
 		msgsnd(qid, &msg, sizeof(int), 0);

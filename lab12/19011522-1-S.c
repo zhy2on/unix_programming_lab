@@ -24,16 +24,11 @@ int main(void) {
 	int time;
 	struct timeval t;
 
-	for (i=0;i<3;i++){
+	for (i=0;i<6;i++){
 		// 6개의 fifo 만들고, open
 		mkfifo(f[i], 0600);
-		mkfifo(f[i+3], 0600);
-		
-		//printf("waiting client%d\n", i);
-		fd[i] = open(f[i], O_RDONLY);
-		fd[i+3] = open(f[i+3], O_WRONLY);
+		fd[i] = open(f[i], O_RDWR);
 	}
-	printf("server is ready\n");
 	
 	// select 문을 위한 master값 설정
 	FD_ZERO(&master);
@@ -43,7 +38,7 @@ int main(void) {
 	// select 문의 timer 값 설정
 	time = 30;
 	t.tv_sec = time;
-	while (set=master, select(fd[5]+1, &set, NULL, NULL, &t)>0){
+	while (set=master, select(fd[2]+1, &set, NULL, NULL, &t)>0){
 		for (i=0; i<3; i++){
 			if (FD_ISSET(fd[i], &set)){
 				if (read(fd[i], buf, sizeof(buf)) > 0){
