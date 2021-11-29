@@ -31,7 +31,7 @@ int main(void) {
 	fd = open("data1", O_RDWR|O_CREAT, 0600);
 	
 	addr = mmap(NULL, 512, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-	ftruncate(fd, 2048);
+	ftruncate(fd, 512);
 
 	pid = getpid();
 	strncpy(addr, (char*)&pid, sizeof(pid_t));
