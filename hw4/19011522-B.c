@@ -28,7 +28,7 @@ int main(void) {
 	act.sa_handler = catchusr;
 	sigaction(SIGUSR1, &act, NULL);
 
-	fd = open("data1", O_RDWR|O_CREAT, 0600);
+	fd = open("data1", O_RDWR|O_CREAT|O_TRUNC, 0600);
 	
 	addr = mmap(NULL, 512, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 	ftruncate(fd, 512);

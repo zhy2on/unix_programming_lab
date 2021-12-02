@@ -29,7 +29,9 @@ int main(void) {
 	}
 
 	addr = mmap(NULL, 512, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0); // memory mapping
-	while((n = read(fd, &pid, sizeof(pid_t))) == 0){
+	strncpy((char*)&pid, addr, sizeof(pid_t));
+	while(pid == 0){
+		strncpy((char*)&pid, addr, sizeof(pid_t));
 		sleep(3);
 	}
 
