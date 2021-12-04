@@ -39,7 +39,7 @@ int main(void){
 		semctl(semid, 0, SETVAL, arg);
 	}
 
-	printf("semid: %d val: %d\n", semid, semctl(semid, GETVAL, 0));
+	//printf("semid: %d val: %d\n", semid, semctl(semid, 0, GETVAL));
 	// file open & memory mapping
 	fd = open("data1", O_RDWR|O_CREAT, 0600);
 	addr = mmap(NULL, 512, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
@@ -51,8 +51,6 @@ int main(void){
 		p_buf.sem_op = -1;
 		p_buf.sem_flg = 0;
 		semop(semid, &p_buf, 1);
-
-		perror("semop");
 
 		// mapping된 공간의 정수 출력
 		printf("%d\n", *(addr+i));

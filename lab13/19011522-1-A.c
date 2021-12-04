@@ -39,7 +39,7 @@ int main(void){
 		semctl(semid, 0, SETVAL, arg);
 	}
 
-	printf("semid: %d val: %d\n", semid, semctl(semid, 0, GETVAL, 0));
+	//printf("semid: %d val: %d\n", semid, semctl(semid, 0, GETVAL));
 
 	// file open & memory mapping
 	fd = open("data1", O_RDWR|O_CREAT, 0600);
