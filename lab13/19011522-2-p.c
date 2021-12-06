@@ -22,13 +22,19 @@ union semun{
 	ushort *array;
 };
 
+struct buffer{
+	int f, r;
+	char msg[10][512];
+};
+
 int main(void){
+	char tmp[512];
+	ushort buf[2] = {10,0};
 	int fd, i, semid, n;
-	char *addr;
 	key_t key;
 	union semun arg;
+	struct buffer *msg_buf;
 	struct sembuf p_buf;
-	ushort buf[2] = {0, 10};
 
 	key=ftok("key", 1);
 
@@ -38,7 +44,7 @@ int main(void){
 		semid = semget(key, 2, 0);
 	}
 	else {
-		arg.array = buf; //fill cnt, empty cnt
+		arg.array = buf;
 		semctl(semid, 0, SETALL, arg);
 	}
 
@@ -46,31 +52,31 @@ int main(void){
 
 	// file open & memory mapping
 	fd = open("data1", O_RDWR|O_CREAT, 0600);
-	addr = mmap(NULL, 512, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-	ftruncate(fd, 512 * 10);
+	msg_buf = mmap(NULL, sizeof(struct buffer), PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+	ftruncate(fd, sizeof(struct buffer));
 
-	i = 0;
-	while (1) {
+	msg_buf->f = msg_buf->r = 0;
+	do {
+		scanf("%s", tmp);
+
 		//semWait(e)
-		p_buf.sem_num = 1;
+		p_buf.sem_num = 0;
 		p_buf.sem_op = -1;
 		p_buf.sem_flg = 0;
 		semop(semid, &p_buf, 1);
 
 		//append
-		n = read(0, addr+(512*(i%10)), 512) - 1;
-		(addr+(512*(i%10)))[n] = '\0';
-		if (strcmp(addr+(512*(i%10)), "quit") == 0)
-			break;
-		printf("idx: %d buf: %s\n", i%10, addr+(512*(i%10)));
-		i++;
+		strcpy(msg_buf->msg[msg_buf->r], tmp);
+		printf("idx: %d msg: %s\n", msg_buf->r, msg_buf->msg[msg_buf->r]);
+		(msg_buf->r)++;
+		(msg_buf->r)%=10;
 
 		//semSignal(f)
-		p_buf.sem_num = 0;
+		p_buf.sem_num = 1;
 		p_buf.sem_op = 1;
 		p_buf.sem_flg = 0;
 		semop(semid, &p_buf, 1);
-	}
+	} while (strcmp(tmp, "quit"));
 
 	semctl(semid, 0, IPC_RMID, 0);
 	exit(0);
