@@ -89,12 +89,11 @@ int main(void){
 	printf("semid: %d\n", semid);
 
 	fd=open("data", O_RDWR|O_CREAT, 0600);
-	addr=mmap(NULL, sizeof(int)*5, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+	addr=mmap(NULL, sizeof(int)*6, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 	// 파일 크기 조절
-	ftruncate(fd, sizeof(int)*5);
-	// mapping된 공간 초기화
-	memset(addr, 0, sizeof(int)*5);
+	ftruncate(fd, sizeof(int)*6);
 
+	// mapping된 공간 초기화
 	addr[0] = 0;
 	for (i=1; i<6; i++){
 		scanf("%d", (addr+i));
