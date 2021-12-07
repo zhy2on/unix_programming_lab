@@ -17,9 +17,13 @@
 #include <time.h>
 
 void do_child(int id, int p[3][2]){
-	int in, pid=getpid();
-	// 불필요한 pipe 닫기
-	close(p[id][1]);
+	int i, in, pid=getpid();
+	// 불필요한 pipe 닫기 --> 생략해도 됨
+	for (i=0; i<3; i++) {
+		close(p[i][1]);
+		if (id!=i)
+			close(p[i][0]);
+	}
 	while(1){
 		// pipe에서 정수 읽기
 		read(p[id][0], &in, sizeof(int));
@@ -33,10 +37,7 @@ int main(void){
 	int i, j, in, pid, p[3][2];
 	// pipe 3개 생성
 	for (i = 0; i < 3; i++) {
-		if (pipe(p[i]) == -1) {
-			perror("pipe call");
-			exit(1);
-		}
+		pipe(p[i]);
 	}
 	for (i=0; i<3; i++){
 		if (fork()==0){
@@ -49,8 +50,7 @@ int main(void){
 	for(i = 0; i < 12; i++){
 		scanf("%d", &in);
 		// pipe에 in 쓰기
-		for (j = 0; j < 3; j++)
-			write(p[j][1], &in, sizeof(int));
+		write(p[i%3][1], &in, sizeof(int));
 	}
 	in=-1;
 	for(i=0;i<3;i++) // -1 전달
