@@ -29,7 +29,7 @@ void set_sembuf(struct sembuf *p_buf, int snum, int sop) {
 }
 
 int main(void){
-	ushort buf[2]={1, 1}; // semaphore 초기값
+	ushort buf[2]={1, 0}; // semaphore 초기값
 	int i, j, pid, semid;
 	key_t key;
 	union semun arg;
@@ -54,10 +54,10 @@ int main(void){
 		semop(semid, &p_buf, 1);
 		for (j=0; j<3; j++){
 			printf("%d ... %ld\n", i, pid);
-			sleep(3);
+			sleep(1);
 		}
 		// 동기화를 위한 semaphore 연산
-		set_sembuf(&p_buf, 1, -1);
+		set_sembuf(&p_buf, 1, 1);
 		semop(semid, &p_buf, 1);
 	}
 	return 0;
