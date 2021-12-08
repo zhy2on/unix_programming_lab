@@ -54,8 +54,8 @@ void parent(int p[3][2]){
 			if (FD_ISSET(p[i][0], &set)){
 				if ((n = read(p[i][0], buf, MSGSIZE)) > 0)
 					printf("MSG from %d=%s\n", i, buf);
-				else if (n == 0) {
-					FD_CLR(p[i][0], &master);
+				else if (n == 0) { // 해당하는 child가 종료했다는 뜻
+					FD_CLR(p[i][0], &master); // 원본 master에 업데이트를 시켜준다.
 					cnt++;
 				}
 			}
