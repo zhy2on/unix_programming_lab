@@ -38,7 +38,7 @@ int main(void){
 void parent(int p[3][2]){
 	char buf[MSGSIZE], ch;
 	fd_set set, master;
-	int i, j, k, cnt=0, n;
+	int i, j, k, cnt=0, n, tmp;
 	struct timeval time;
 
 	for (i=0; i<3; i++)
@@ -48,7 +48,8 @@ void parent(int p[3][2]){
 		FD_SET(p[i][0], &master);
 
 	time.tv_sec = 5;
-	while (set=master, select(p[2][0]+1, &set, NULL, NULL, &time) > 0) {
+	while (set=master, (tmp = select(p[2][0]+1, &set, NULL, NULL, &time)) > 0) {
+		printf("tmp: %d\n", tmp); // select 리턴값은 데이터를 받은 개수
 		for (i=0; i<3; i++){
 			if (FD_ISSET(p[i][0], &set)){
 				if ((n = read(p[i][0], buf, MSGSIZE)) > 0)
@@ -64,11 +65,16 @@ void parent(int p[3][2]){
 			return;
 		*/
 		time.tv_sec = 5; //while문 안에서 timeval을 새로 갱신해줘야 한다.
+		/*
+		if (waitpid(-1, NULL, WNOHANG) == -1)
+			return;
+		*/
 	}
 }
 
 int child(int p[2]){
 	int count;
+
 	close(p[0]);
 	for (count=0; count<2; count++){
 		write(p[1], msg1, MSGSIZE);
