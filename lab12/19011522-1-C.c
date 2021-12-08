@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 	for (i=0; i<3; i++){
 		scanf("%s", buf);
 		// server에게 문자열 보내기
-		write(fd_w, buf, sizeof(buf));
+		write(fd_w, buf, strlen(buf)+1);
 		// server로부터 문자열의 길이 받기
 		read(fd_r, &n, sizeof(int));
 		printf("%d\n", n);
